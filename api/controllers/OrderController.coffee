@@ -28,21 +28,21 @@ OrderController =
     debug = true
 
     # get params
-    quantity = req.param("quantity")
-    jProduct = req.param('product')
-    jUser = req.param('user')
+    # quantity = req.param("quantity")
+    # jProduct = req.param('product')
+    # jUser = req.param('user')
+
+    newPurchase = req.body
+    quantity = newPurchase.quantity
+    jProduct = newPurchase.product
+    jUser = newPurchase.user
+
 
     # console outputs
     if debug
       console.log ' ===================>'
-      console.log ' json.p.id==>', jProduct.id
-      console.log ' json.p.name==>', jProduct.name
-      console.log ' json.p.descript==>', jProduct.descript
-      console.log ' json.p.quantity==>', quantity
-      console.log ' json.u.name==>', jUser.username
-      console.log ' json.u.email==>', jUser.email
-      console.log ' json.u.mobile==>', jUser.mobile
-      console.log ' json.u.address==>', jUser.address
+      console.log 'product',jProduct
+      console.log 'user',jUser
       console.log ' ===================>'
 
     # step 1 : get product by given id.
@@ -51,22 +51,13 @@ OrderController =
         #
         if debug
           console.log ' ===================>'
-          console.log ' db.p.id======>',findProduct.id
-          console.log ' db.p.name====>',findProduct.name
-          console.log ' db.p.price===>',findProduct.price
-          console.log ' db.p.descript=>',findProduct.descript
-          console.log ' db.p.stockQuantity=>',findProduct.stockQuantity
+          console.log findProduct.dataValues
           console.log ' ===================>'
 
         #
-        if !findProduct
-          console.log '找不到商品！ 請確認商品ID！'
-        else
-          #
-          if findProduct.stockQuantity < 1
-            console.log '商品缺貨！'
-          else
-            done(null)
+        return done(msg: '找不到商品！ 請確認商品ID！') if !findProduct
+        return done(msg: '商品缺貨！') if findProduct.stockQuantity < 1
+        done(null)
 
     # step 2 : check user whether exists.
     doFindOrCreateUser = (done) ->

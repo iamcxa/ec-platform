@@ -73,7 +73,7 @@ OrderController =
         # user exists.
         else
           console.log 'find a exist user. id===>',thisUser.id
-          done(null)
+          done(null,createdUser.id)
 
     # step 3 : insert a new order
     doCreateOrder = (done, userid) ->
